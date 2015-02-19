@@ -1,0 +1,52 @@
+body{
+	background-color: #B7DFFA;
+}
+
+.postWrap{
+	background-color: white;
+	padding: 15px;
+	margin: 15px;
+	width: 30%;
+	border: 1px solid gray;
+	border-radius: 5px;
+}
+
+.timeStamp{
+	float: right;
+}
+
+.login{
+	float: right;
+	width: 48%;
+	margin-right: 15px;
+}
+
+.loginText{
+	float: right;
+}
+
+h2{
+	font-family: 'Courier New', Courier, 'Lucida Sans Typewriter', 'Lucida Typewriter', monospace;
+}
+
+h3{
+	font-family: 'Century Gothic', CenturyGothic, AppleGothic, sans-
+}
+
+.title{
+	float: left;
+	width: 49%;
+}
+
+.titleWrap{
+	position: fixed;
+	top: 0px;
+	left: 0px;
+	width: 100%;
+	background-color: #B3B3B3;
+	padding: 10px;
+}
+
+.contentWrap{
+	margin-top:100px;
+}
