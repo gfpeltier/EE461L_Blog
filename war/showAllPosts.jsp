@@ -21,7 +21,7 @@
   	
   	<body>
   	<div class="titleWrap">
-  		<div class="login">
+  	<div class="login">
   			<%
   				String blogName = request.getParameter("blogName");
     			if (blogName == null) {
@@ -30,42 +30,10 @@
     			pageContext.setAttribute("blogName", blogName);
   				UserService userService = UserServiceFactory.getUserService();
     			User user = userService.getCurrentUser(); 
-    			DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    			Key blogKey = KeyFactory.createKey("Blog", blogName);
-  				if (user != null) {
+    			if (user != null) {
       				pageContext.setAttribute("user", user);
-  				boolean isSubscribed = false;
-  				Query subQuery = new Query("Subscription", blogKey);
-  				List<Entity> subs = datastore.prepare(subQuery).asList(FetchOptions.Builder.withDefaults());
-  				for(Entity sub : subs){
-  					pageContext.setAttribute("subscriber",
-                                         sub.getProperty("user"));
-                    
-                    System.out.println(sub.getProperty("user"));
-                    System.out.println("User: " + user.getEmail());
-  					if(user.getEmail().equals(sub.getProperty("user"))) {
-  						isSubscribed = true;
-  						pageContext.setAttribute("realSubscriber",
-                                         sub.getProperty("user"));
-  					}
-  				}
-  				if(!isSubscribed){
   			%>
-  			<form style="float: right;" action="/subscribeUser" method="post">
-  				<input type="submit" value="Subscribe to Blog">
-  				<input type="hidden" name="blogName" value="${fn:escapeXml(blogName)}"/>
-  			</form>
-  			<%
-  				} else {
-  			%>
-  			<form style="float: right;" action="/unsubscribeUser" method="post">
-  				<input type="submit" value="Unsubscribe">
-  				<input type="hidden" name="blogName" value="${fn:escapeXml(blogName)}"/>
-  				<input type="hidden" name="sub" value="${fn:escapeXml(realSubscriber)}"/>
-  			</form>
-  			<%
-  				}
-  			%>
+  	
   			<p class="loginText">Hello, ${fn:escapeXml(user.nickname)}! (You can
 			<a href="<%= userService.createLogoutURL(request.getRequestURI()) %>">sign out</a>.)</p>
 			<%
@@ -77,19 +45,22 @@
 			<%
     			}
 			%>
-		</div>
-		<div class="title">
-			<h2 style="margin: 10px;">The Software Blog</h2>
-		</div>	
 	</div>
-	<div class="contentWrap">
+  	
+  		<div class="title">
+			<h2 style="margin: 10px;">The Software Blog</h2>
+		</div>
+  	</div>
+  	
+  	<div class="contentWrap">
 	
 	<%
-    
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    Key blogKey = KeyFactory.createKey("Blog", blogName);
     // Run an ancestor query to ensure we see the most up-to-date
     // view of the Greetings belonging to the selected Guestbook.
     Query query = new Query("Post", blogKey).addSort("date", Query.SortDirection.DESCENDING);
-    List<Entity> posts = datastore.prepare(query).asList(FetchOptions.Builder.withLimit(5));
+    List<Entity> posts = datastore.prepare(query).asList(FetchOptions.Builder.withDefaults());
     if (posts.isEmpty()) {
         %>
         <p>Blog '${fn:escapeXml(blogName)}' has no messages.</p>
@@ -125,18 +96,12 @@
         }
     }
 	%>
+	</div>
 	
-	<% if (user != null){ %>
-		<form action="createPostForm.jsp">
-			<input type="submit" value="Create Blog Post">
-		</form>
-		<% } else{ %>
-		<p>Log in to post in this blog!</p>
-		<% } %>
-		<form action="/showAllPosts" method="post">
-			<input type="submit" value="View All Posts">
-			<input type="hidden" name="blogName" value="${fn:escapeXml(blogName)}"/>
-		</form>	
-		</div>
+	<form action="index.jsp">
+		<input type="submit" value="Back Home">
+	</form>
+  	
   	</body>
+  	
 </html>

@@ -51,10 +51,8 @@
 				<textarea name="content" rows="5" cols="60"></textarea>
 			</div>
 			<div>
-				<form action="index.jsp">
-					<input type="submit" value="Cancel">
-				</form>
 				<input type="submit" value="Submit">
+				<span><a href="index.jsp">Cancel</a></span>
 				<input type="hidden" name="blogName" value="${fn:escapeXml(blogName)}"/>
 			</div>
 		</div>
